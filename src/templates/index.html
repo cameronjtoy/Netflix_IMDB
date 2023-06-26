@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Analysis</title>
+    <link rel="stylesheet" href="../static/main.css">
+</head>
+
+<div class="nav">
+    <a href="/">Our Dataset</a>
+    <a href="/input">Your Values</a>
+</div>
+<body>
+    <form method="POST">
+        <select name="plot_choice">
+            <option value="histogram_imdb">IMDB Score Histogram</option>
+            <option value="scatter_imdb_tmdb">IMDB vs TMDB Score Scatter Plot</option>
+            <option value="histogram_tmdb">TMDB Score Histogram</option>
+            <option value="line_imdb_by_year">IMDB Scores by Release Year Line Plot</option>
+            <option value="bar_directors_imdb">Top 10 Directors by IMDB Score Bar Plot</option>
+            <option value="bar_director_counts">Top 10 Directors by Number of Movies and Shows Directed Bar Plot</option>
+            <option value="bar_lowest_rated_directors">Frequency of Top 10 Lowest Rated Directors Bar Plot</option>
+            <option value="scatter_runtime_imdb">Runtime vs IMDB Score Scatter Plot</option>
+            <option value="hexbin_runtime_imdb">Runtime vs IMDB Score Hexbin Plot</option>
+            <option value="scatter_runtime_tmdb">Runtime vs TMDB Score Scatter Plot</option>
+            <option value="hexbin_runtime_tmdb">Runtime vs TMDB Score Hexbin Plot</option>
+            <option value="histogram_movies_shows_imdb">IMDB Score Histogram for Movies and Shows</option>
+            <option value="boxplot_movies_shows_imdb">IMDB Score Box Plot for Movies and Shows</option>
+
+            <option value="logistic_regression">Advanced Linear Regression Algorithm</option>
+            <option value="k_means_algorithm">K-Means Algorithm</option>
+            <option value="k_nn_algorithm">K-NN Algorithm</option>
+            <option value="linear_regression_algorithm">Linear Regression Algorithm</option>
+            <option value="decision_tree_algorithm">Decision Tree Algorithm</option>
+            
+
+        </select>
+        <button type="submit">Generate Plot</button>
+    </form>
+    
+    {% if plot_description %}
+    <h3>Plot Description</h3>
+    <p>{{ plot_description }}</p>
+    {% endif %}
+
+
+    {% if plot_url %}
+    <img src="data:image/png;base64,{{ plot_url }}" alt="Generated Plot">
+    {% endif %}
+    {% if confusion_matrix_url %}
+    <h3>Confusion Matrix</h3>
+    <img src="data:image/png;base64,{{ confusion_matrix_url }}" alt="Confusion Matrix" />
+    {% endif %}
+    {% if roc_curve_url %}
+        <h3>ROC Curve</h3>
+        <img src="data:image/png;base64,{{ roc_curve_url }}" alt="ROC Curve" />
+    {% endif %}
+    {% if silhouette_scores_url %}
+    <h3>Silhouette Scores</h3>
+    <img src="data:image/png;base64,{{ silhouette_scores_url }}" alt="Silhouette Scores" />
+    {% endif %}
+    {% if k_means_plot_url %}
+    <h3>K Means Plot</h3>
+    <img src="data:image/png;base64,{{ k_means_plot_url }}" alt="K-Means Plot" />
+    {% endif %}
+    {% if test_accuracies_url %}
+    <h3>Test Set Accuracies</h3>
+    <img src="data:image/png;base64,{{ test_accuracies_url }}" alt="Test Set Accuracies" />
+    {% endif %}
+    {% if mse %}
+    <h3>Mean squared error: {{ mse }}</h3>
+    {% endif %}
+    {% if r2 %}
+        <h3>R-squared score: {{ r2 }}</h3>
+    {% endif %}
+
+    {% if classification_report %}
+    <h3>Classification Report</h3>
+    <pre>{{ classification_report }}</pre>
+    {% endif %}
+    {% if confusion_matrix_data %}
+        <h3>Confusion Matrix</h3>
+        <img src="data:image/png;base64,{{ confusion_matrix_data }}" alt="Confusion Matrix" />
+    {% endif %}
+    {% if roc_curve_data %}
+        <h3>ROC Curve</h3>
+        <img src="data:image/png;base64,{{ roc_curve_data }}" alt="ROC Curve" />
+    {% endif %}
+
+
+    <script>
+        const plotChoiceSelect = document.querySelector('select[name="plot_choice"]');
+        const previousPlotChoice = "{{ plot_choice }}";
+    
+        if (previousPlotChoice) {
+            plotChoiceSelect.value = previousPlotChoice;
+        }
+    </script>
+    
+</body>
+</html>

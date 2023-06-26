@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Values - Movie Analysis</title>
+    <link rel="stylesheet" href="../static/main.css">
+</head>
+<body>
+    <div class="nav">
+        <a href="/">Our Dataset</a>
+        <a href="/input">Your Values</a>
+    </div>
+
+    <h1>Upload your dataset</h1>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".csv">
+        <button type="submit">Submit</button>
+    </form>
+
+    <body>
+        <form method="POST">
+            <select name="plot_choice">
+                <option value="histogram_freq">Histogram Frequency</option> 
+                <option value="line">Line Plot Comparison</option>
+                <option value="bar">Top Value Bar Plot</option>
+
+                <option value="linear_regression">Linear Regression</option> 
+                <option value="k_nn_algorithm">K-NN Algorithm</option> 
+                <option value="decision_tree_algorithm">Decision Tree Algorithm</option> 
+ 
+
+            </select>
+            <input type="text" name="input_1" placeholder="Enter Column" required>
+            <input type="text" name="input_2" id="input_2" placeholder="Enter Column" style="display:none;">
+            <input type="text" name="input_3" id="input_3" placeholder="Enter Column" style="display:none;">
+            <button type="submit">Generate Plot</button>
+        </form>
+
+        {% if current_file %}
+        <p>Current file: {{ current_file }}</p>
+        {% endif %}
+    
+        {% if plot_description %}
+        <h3>Plot Description</h3>
+        <p>{{ plot_description }}</p>
+        {% endif %}
+        
+        {% if plot_url %}
+        <img src="data:image/png;base64,{{ plot_url }}" alt="Generated Plot">
+        {% endif %}
+        {% if confusion_matrix_url %}
+        <h3>Confusion Matrix</h3>
+        <img src="data:image/png;base64,{{ confusion_matrix_url }}" alt="Confusion Matrix" />
+        {% endif %}
+        {% if roc_curve_url %}
+            <h3>ROC Curve</h3>
+            <img src="data:image/png;base64,{{ roc_curve_url }}" alt="ROC Curve" />
+        {% endif %}
+        {% if silhouette_scores_url %}
+        <h3>Silhouette Scores</h3>
+        <img src="data:image/png;base64,{{ silhouette_scores_url }}" alt="Silhouette Scores" />
+        {% endif %}
+        {% if k_means_plot_url %}
+        <h3>K Means Plot</h3>
+        <img src="data:image/png;base64,{{ k_means_plot_url }}" alt="K-Means Plot" />
+        {% endif %}
+        {% if test_accuracies_url %}
+        <h3>Test Set Accuracies</h3>
+        <img src="data:image/png;base64,{{ test_accuracies_url }}" alt="Test Set Accuracies" />
+        {% endif %}
+        {% if mse %}
+        <h3>Mean squared error: {{ mse }}</h3>
+        {% endif %}
+        {% if r2 %}
+            <h3>R-squared score: {{ r2 }}</h3>
+        {% endif %}
+    
+        {% if classification_report %}
+        <h3>Classification Report</h3>
+        <pre>{{ classification_report }}</pre>
+        {% endif %}
+        {% if confusion_matrix_data %}
+            <h3>Confusion Matrix</h3>
+            <img src="data:image/png;base64,{{ confusion_matrix_data }}" alt="Confusion Matrix" />
+        {% endif %}
+        {% if roc_curve_data %}
+            <h3>ROC Curve</h3>
+            <img src="data:image/png;base64,{{ roc_curve_data }}" alt="ROC Curve" />
+        {% endif %}
+    
+    
+        <script>
+            const plotChoiceSelect = document.querySelector('select[name="plot_choice"]');
+            const previousPlotChoice = "{{ plot_choice }}";
+            const input2 = document.getElementById('input_2');
+            const input3 = document.getElementById('input_3');
+        
+            if (previousPlotChoice) {
+                plotChoiceSelect.value = previousPlotChoice;
+            }
+        function updateInputDisplay() {
+            if (plotChoiceSelect.value === 'histogram_freq') {
+                input2.style.display = 'none';
+                input2.removeAttribute('required');
+
+            } 
+            else if(plotChoiceSelect.value === 'line' ||plotChoiceSelect.value === 'bar' || plotChoiceSelect.value === 'linear_regression'){
+                input2.style.display = '';
+                input2.setAttribute('required', '');
+                input3.style.display = 'none';
+                input3.removeAttribute('required');
+            }
+        
+            else {
+                input2.style.display = '';
+                input2.setAttribute('required', '');
+                input3.style.display = '';
+                input3.setAttribute('required', '');
+            }
+        }
+
+        plotChoiceSelect.addEventListener('change', updateInputDisplay);
+        updateInputDisplay();
+
+        </script>
+        
+    </body>
+
+</body>
+</html>
